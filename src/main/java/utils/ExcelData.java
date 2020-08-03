@@ -17,7 +17,7 @@ import java.util.List;
 public class ExcelData {
     List list = new ArrayList();
     File file = new File("src/main/resources/testdata/testdata.xlsx");
-    String resource ;
+    String resource;
 
     FileInputStream inputStream;
     OutputStream outputStream;
@@ -26,8 +26,8 @@ public class ExcelData {
     {
         try {
             resource = file.getCanonicalPath();
-            System.out.println("resource:"+resource);
-        }catch (Exception e){
+            System.out.println("resource:" + resource);
+        } catch (Exception e) {
 
         }
     }
@@ -38,11 +38,11 @@ public class ExcelData {
             xssfWorkbook = new XSSFWorkbook(inputStream);
             XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(sheet);
             XSSFRow xssfRow = xssfSheet.getRow(0);
-            for (int i=0;i<xssfRow.getPhysicalNumberOfCells();i++)
-            if (xssfRow != null) {
-                XSSFCell name = xssfRow.getCell(i);
-                list.add(name.toString());
-            }
+            for (int i = 0; i < xssfRow.getPhysicalNumberOfCells(); i++)
+                if (xssfRow != null) {
+                    XSSFCell name = xssfRow.getCell(i);
+                    list.add(name.toString());
+                }
 
 //        System.out.println(list.toString());
             inputStream.close();
@@ -52,7 +52,7 @@ public class ExcelData {
         return list;
     }
 
-    public Object[][] getdata(int sheet){
+    public Object[][] getdata(int sheet) {
         String[][] objects;
         try {
             inputStream = new FileInputStream(file);
@@ -61,14 +61,14 @@ public class ExcelData {
             // 为了返回值是Object[][],定义一个多行单列的二维数组
 //            System.out.println("******"+xssfSheet.getLastRowNum());
             objects = new String[xssfSheet.getLastRowNum()][];
-            for (int i = 1; i < xssfSheet.getLastRowNum()+1; i++) {
+            for (int i = 1; i < xssfSheet.getLastRowNum() + 1; i++) {
                 XSSFRow xssfRow = xssfSheet.getRow(i);
 //                System.out.println("******"+xssfRow.getPhysicalNumberOfCells());
                 objects[i - 1] = new String[xssfRow.getPhysicalNumberOfCells()];
                 if (xssfRow != null) {
                     for (int j = 1; j <= xssfRow.getPhysicalNumberOfCells(); j++) {
 
-                        XSSFCell data = xssfRow.getCell(j-1);
+                        XSSFCell data = xssfRow.getCell(j - 1);
 //                        System.out.println(data);
                         objects[i - 1][j - 1] = data.toString();
 //                        System.out.println(objects[i-1][j-1]);
@@ -84,15 +84,14 @@ public class ExcelData {
     }
 
 
-    public void writeResult(String data,int sheet,String result){
-        ExcelData excelData=new ExcelData();
-        List list=excelData.getlist(sheet);
+    public void writeResult(String data, int sheet, String result,String caseId) {
+        ExcelData excelData = new ExcelData();
+        List list = excelData.getlist(sheet);
         try {
             inputStream = new FileInputStream(file);
             xssfWorkbook = new XSSFWorkbook(inputStream);
             XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(sheet);
-
-            XSSFCell cell=xssfSheet.getRow(1).getCell(list.indexOf(result));
+            XSSFCell cell = xssfSheet.getRow(Integer.parseInt(caseId)).getCell(list.indexOf(result));
             cell.setCellValue(data);
             outputStream = FileUtils.openOutputStream(file);
             xssfWorkbook.write(outputStream);
@@ -105,9 +104,9 @@ public class ExcelData {
     }
 
     public static void main(String[] args) {
-        ExcelData excelData=new ExcelData();
-        List list=excelData.getlist(1);
-        excelData.writeResult("1",1,"ActualResponseData(实际响应数据)");
+        ExcelData excelData = new ExcelData();
+        List list = excelData.getlist(1);
+        excelData.writeResult("1", 1, "ActualResponseData(实际响应数据)","1");
 
     }
 

@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class RegisterTest {
     @Test(dataProvider = "testdata")
-    public void test1(String apiId,String requestData,String responseData){
+    public void test1(String caseId,String apiId,String requestData,String responseData){
         String url= ApiUtil.getUrl(apiId);
         Map parameters= JSON.parseObject(requestData);
         String type=ApiUtil.getRequestType(apiId);
@@ -26,6 +26,7 @@ public class RegisterTest {
             result= HttpUtil.post(url,parameters);
         }
         System.out.println(result);
+
     }
     @DataProvider(name = "testdata")
     public Object[][] testdata(){
